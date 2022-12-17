@@ -26,7 +26,7 @@ public class Sudoku {
 		population = new Population();
 	}
 
-	// lai 
+	// lai
 	public void crossover(Individual dad, Individual mom) {
 		// khoi tao 2 con
 		int[][] child1 = new int[Data.GEN_SIZE][Data.GEN_SIZE];
@@ -70,6 +70,7 @@ public class Sudoku {
 		}
 		return result;
 	}
+
 	// dot bien ( doi cho 2 vi tri )
 	private void swap(int[] arr, int point1, int point2) {
 		int temp = 0;
@@ -80,40 +81,41 @@ public class Sudoku {
 		}
 	}
 
-
-
 	public Individual genetic() {
-		// lấy ra giá trị individual đầu tiên
+		// sắp xếp quần thể theo heuristic
+		Collections.sort(getPopulation().getListInd());
+		// lấy 100 cá thể đầu
+		population.selectIndividual();
+		// lấy ra cá thể đầu tiên
+		// kiểm tra xem nó tối ưu chưa
 		Individual goal = getPopulation().getListInd().get(0);
-		if(goal.heuristic() != 0) {
-		System.out.println("Đang chạy..., Goal: " + goal.heuristic());}
+		if (goal.heuristic() != 0) {
+			System.out.println("Đang chạy..., Goal: " + goal.heuristic());
+		}
 		if (goal.heuristic() == 0) {
 			result = goal.getIndividual();
 			System.out.println("Đã xong, Goal: " + goal.heuristic());
 			return goal;
-		}// chọn lọc lại population
-		// sắp xếp quần thể
-		Collections.sort(getPopulation().getListInd());
-		// chon lai 100 ca the tot
-		population.selectIndividual();
-
-		
+		}
 
 		// cho lai với nhau
 		for (int i = 0; i < Data.POP_SIZE; i += 2) {
 			for (int j = i + 1; j < i + 2; j++) {
-				// nếu mảng lẻ
-				if (j % 2 != 0) {
+				
+				if (j % 2 != 0) {// phòng nếu quần thể size lẻ
 					crossover(getPopulation().getListInd().get(i), getPopulation().getListInd().get(j));
 				}
 			}
-		} // cho đột biến
+		}
+
+		// cho đột biến 20 đứa con sau
 		int size = getPopulation().getListInd().size();
 
 		Individual dotbien;
 		for (int i = size - Data.SLDOTBIEN; i < size; i++) {
 			dotbien = mutation(getPopulation().getListInd().get(i));
-				population.getListInd().add(dotbien);
+			// add vào quần thể
+			population.getListInd().add(dotbien);
 
 		}
 		return genetic();

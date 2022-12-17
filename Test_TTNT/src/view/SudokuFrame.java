@@ -16,6 +16,7 @@ import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
@@ -30,30 +31,46 @@ public class SudokuFrame extends JFrame implements ActionListener, KeyListener {
 	JButton newGame_bt, start_bt;
 	JButton bt[][] = new JButton[9][9];
 	ArrayList<int[][]> arr_source;
-	Sudoku sudoku ;
+	static JLabel message = new JLabel();
+	static long time = 0;
+	Sudoku sudoku;
 	// ket qua
 	int[][] resultArr = new int[9][9];
 
 	// mang check
 	public SudokuFrame() {
 		init();
+		array_Source();
+
+	}
+
+	public void array_Source() {
 		arr_source = new ArrayList<>();
 
-		int[][] kho = { { 0, 0, 4, 0, 0, 0, 0, 6, 0 }, { 0, 0, 0, 1, 0, 0, 8, 0, 9 }, { 3, 0, 0, 0, 0, 7, 0, 0, 0 },
+		int[][] arr1 = { { 0, 0, 4, 0, 0, 0, 0, 6, 0 }, { 0, 0, 0, 1, 0, 0, 8, 0, 9 }, { 3, 0, 0, 0, 0, 7, 0, 0, 0 },
 				{ 0, 8, 0, 0, 0, 0, 5, 0, 0 }, { 0, 0, 0, 4, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 7, 0 },
 				{ 0, 0, 0, 2, 0, 0, 0, 0, 6 }, { 1, 0, 0, 0, 0, 4, 0, 3, 0 }, { 0, 2, 0, 0, 7, 0, 1, 0, 0 } };
-		int[][] trungbinh = { { 5, 3, 0, 0, 7, 0, 0, 0, 0 }, { 6, 0, 0, 1, 9, 5, 0, 0, 0 },
-				{ 0, 9, 8, 0, 0, 0, 0, 6, 0 }, { 8, 0, 0, 0, 6, 0, 0, 0, 3 }, { 4, 0, 0, 8, 0, 3, 0, 0, 1 },
-				{ 7, 0, 0, 0, 2, 0, 0, 0, 6 }, { 0, 6, 0, 0, 0, 0, 2, 8, 0 }, { 0, 0, 0, 4, 1, 9, 0, 0, 5 },
-				{ 0, 0, 0, 0, 8, 0, 0, 7, 9 } };
-		int[][] de = { { 0, 0, 7, 8, 0, 0, 9, 0, 0 }, { 0, 0, 0, 5, 0, 0, 0, 3, 1 }, { 9, 0, 0, 0, 0, 1, 0, 4, 0 },
+		int[][] arr2 = { { 5, 3, 0, 0, 7, 0, 0, 0, 0 }, { 6, 0, 0, 1, 9, 5, 0, 0, 0 }, { 0, 9, 8, 0, 0, 0, 0, 6, 0 },
+				{ 8, 0, 0, 0, 6, 0, 0, 0, 3 }, { 4, 0, 0, 8, 0, 3, 0, 0, 1 }, { 7, 0, 0, 0, 2, 0, 0, 0, 6 },
+				{ 0, 6, 0, 0, 0, 0, 2, 8, 0 }, { 0, 0, 0, 4, 1, 9, 0, 0, 5 }, { 0, 0, 0, 0, 8, 0, 0, 7, 9 } };
+		int[][] arr3 = { { 0, 0, 7, 8, 0, 0, 9, 0, 0 }, { 0, 0, 0, 5, 0, 0, 0, 3, 1 }, { 9, 0, 0, 0, 0, 1, 0, 4, 0 },
 				{ 2, 1, 0, 0, 6, 0, 7, 8, 0 }, { 0, 0, 0, 0, 0, 3, 0, 9, 0 }, { 3, 0, 9, 0, 1, 0, 2, 0, 0 },
 				{ 4, 0, 0, 0, 0, 0, 0, 1, 6 }, { 0, 0, 0, 1, 0, 9, 0, 0, 8 }, { 0, 8, 0, 0, 3, 0, 0, 0, 0 } };
 
-		arr_source.add(kho);
-		arr_source.add(trungbinh);
-		arr_source.add(de);
-		
+		int[][] arr4 = { 
+				{ 0, 2, 7, 5, 3, 0, 0, 9, 0 },
+				{ 8, 0, 0, 6, 4, 0, 7, 0, 0 },
+				{ 5, 0, 4, 0, 2, 0, 0, 0, 1 },
+				{ 0, 5, 0, 9, 0, 0, 0, 3, 0 },
+				{ 7, 3, 0, 1, 8, 0, 9, 0, 0 },
+				{ 0, 0, 2, 0, 7, 0, 0, 0, 0 },
+				{ 0, 0, 0, 4, 9, 6, 0, 0, 3 }, 
+				{ 0, 0, 9, 0, 0, 0, 0, 0, 0 }, 
+				{ 2, 0, 0, 0, 0, 0, 6, 0, 9 } };
+
+		arr_source.add(arr1);
+		arr_source.add(arr2);
+		arr_source.add(arr4);
 	}
 
 	public void init() {
@@ -66,12 +83,16 @@ public class SudokuFrame extends JFrame implements ActionListener, KeyListener {
 		start_bt = new JButton("Start Game");
 		start_bt.addActionListener(this);
 
+		message = new JLabel("run time: " + time + "s");
+
 		pn2.add(newGame_bt);
 		pn2.add(start_bt);
+		pn2.add(message);
 		cn.add(pn2, "North");
 
 		pn = new JPanel();
 		pn.setLayout(new GridLayout(9, 9));
+		this.setTitle("GAME SUDOKU");
 		// tao 81 button
 		for (int i = 0; i < 9; i++)
 			for (int j = 0; j < 9; j++) {
@@ -109,12 +130,16 @@ public class SudokuFrame extends JFrame implements ActionListener, KeyListener {
 	public void actionPerformed(ActionEvent e) {
 		// nhấn nút start
 		String s = e.getActionCommand();
+		long begin, done;
 		if (s.equals("Start Game")) {
+			begin = System.currentTimeMillis();
 			printArr();
 			sudoku = new Sudoku();
 			sudoku.initPop(resultArr);
 			System.out.println(sudoku.genetic());
-			
+			done = System.currentTimeMillis();
+			time = (done - begin) / 1000;
+			message.setText("run time: " + time + "s");
 
 			// in ra kq cuoi cung
 			for (int row = 0; row < Data.GEN_SIZE; row++) {
@@ -128,8 +153,8 @@ public class SudokuFrame extends JFrame implements ActionListener, KeyListener {
 		// nhấn nút new game
 		if (s.equals("New Game")) {
 			this.newGame();
-			sudoku = new Sudoku();
-			sudoku.initPop(resultArr);
+			time = 0;
+			message.setText("run time: " + time + "s");
 			// ran 1 vi tri trong danh sach mang du lieu
 			Random ran = new Random();
 			int index_rd = ran.nextInt(arr_source.size());
@@ -138,7 +163,10 @@ public class SudokuFrame extends JFrame implements ActionListener, KeyListener {
 				for (int column = 0; column < Data.GEN_SIZE; column++) {
 					if (arr_play[row][column] != 0) {
 						bt[row][column].setText(arr_play[row][column] + "");
+						bt[row][column].setBackground(Color.lightGray);
 						resultArr[row][column] = arr_play[row][column];
+					}else {
+						bt[row][column].setBackground(Color.white);
 					}
 				}
 			}

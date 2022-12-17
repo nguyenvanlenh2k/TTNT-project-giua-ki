@@ -26,6 +26,7 @@ public class Individual implements Comparable<Individual> {
 					}
 				}
 			}
+			// khắc phục tại trường hợp số đó đã tồn tại chưa được điền
 			for (int k = 0; k < Data.GEN_SIZE; k++) {
 				if (individual[i][k] == 0) {
 					init();
@@ -46,7 +47,7 @@ public class Individual implements Comparable<Individual> {
 	// Tính số xung đột
 	public int heuristic() {
 
-		return cluster()  + colum();
+		return cluster() + colum();
 	}
 
 //	Tính xung đột theo cụm 3x3
